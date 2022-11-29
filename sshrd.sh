@@ -139,7 +139,7 @@ cd ..
 "$oscheck"/gaster decrypt work/"$(awk "/""${replace}""/{x=1}x&&/iBEC[.]/{print;exit}" work/BuildManifest.plist | grep '<string>' |cut -d\> -f2 |cut -d\< -f1 | sed 's/Firmware[/]dfu[/]//')" work/iBEC.dec
 "$oscheck"/iBoot64Patcher work/iBSS.dec work/iBSS.patched
 "$oscheck"/img4 -i work/iBSS.patched -o sshramdisk/iBSS.img4 -M work/IM4M -A -T ibss
-"$oscheck"/iBoot64Patcher work/iBEC.dec work/iBEC.patched -b "rd=md0 debug=0x2014e wdt=-1 `if [ -z "$2" ]; then :; else echo "$2=$3"; fi` `if [ "$check" = '0x8960' ] || [ "$check" = '0x7000' ] || [ "$check" = '0x7001' ]; then echo "-restore"; fi`" -n
+"$oscheck"/iBoot64Patcher work/iBEC.dec work/iBEC.patched -b "rd=md0 debug=0x2014e wdt=-1 serial=3 `if [ "$check" = '0x8960' ] || [ "$check" = '0x7000' ] || [ "$check" = '0x7001' ]; then echo "-restore"; fi`" -n
 "$oscheck"/img4 -i work/iBEC.patched -o sshramdisk/iBEC.img4 -M work/IM4M -A -T ibec
 
 "$oscheck"/img4 -i work/"$(awk "/""${replace}""/{x=1}x&&/kernelcache.release/{print;exit}" work/BuildManifest.plist | grep '<string>' |cut -d\> -f2 |cut -d\< -f1)" -o work/kcache.raw
@@ -162,15 +162,15 @@ if [ "$oscheck" = 'Darwin' ]; then
 
     "$oscheck"/gtar -x --no-overwrite-dir -f other/ramdisk.tar.gz -C /tmp/SSHRD/
 
-    if [ ! "$2" = 'rootless' ]; then
-        curl -LO https://nightly.link/elihwyma/Pogo/workflows/build/root/Pogo.zip
-        mv Pogo.zip work/Pogo.zip
-        unzip work/Pogo.zip -d work/Pogo
-        unzip work/Pogo/Pogo.ipa -d work/Pogo/Pogo
-        rm -rf /tmp/SSHRD/usr/local/bin/loader.app/*
-        cp -R work/Pogo/Pogo/Payload/Pogo.app/* /tmp/SSHRD/usr/local/bin/loader.app
-        mv /tmp/SSHRD/usr/local/bin/loader.app/Pogo /tmp/SSHRD/usr/local/bin/loader.app/Tips
-    fi
+    #if [ ! "$2" = 'rootless' ]; then
+    #    curl -LO https://nightly.link/elihwyma/Pogo/workflows/build/root/Pogo.zip
+    #    mv Pogo.zip work/Pogo.zip
+    #    unzip work/Pogo.zip -d work/Pogo
+    #    unzip work/Pogo/Pogo.ipa -d work/Pogo/Pogo
+    #    rm -rf /tmp/SSHRD/usr/local/bin/loader.app/*
+    #    cp -R work/Pogo/Pogo/Payload/Pogo.app/* /tmp/SSHRD/usr/local/bin/loader.app
+    #    mv /tmp/SSHRD/usr/local/bin/loader.app/Pogo /tmp/SSHRD/usr/local/bin/loader.app/Tips
+    #fi
 
     hdiutil detach -force /tmp/SSHRD
     hdiutil resize -sectors min work/ramdisk.dmg
@@ -182,18 +182,18 @@ else
     "$oscheck"/hfsplus work/ramdisk.dmg grow 300000000 > /dev/null
     "$oscheck"/hfsplus work/ramdisk.dmg untar other/ramdisk.tar > /dev/null
 
-    if [ ! "$2" = 'rootless' ]; then
-        curl -LO https://nightly.link/elihwyma/Pogo/workflows/build/root/Pogo.zip
-        mv Pogo.zip work/Pogo.zip
-        unzip work/Pogo.zip -d work/Pogo
-        unzip work/Pogo/Pogo.ipa -d work/Pogo/Pogo
-        mkdir -p work/Pogo/uwu/usr/local/bin/loader.app
-        cp -R work/Pogo/Pogo/Payload/Pogo.app/* work/Pogo/uwu/usr/local/bin/loader.app
+    #if [ ! "$2" = 'rootless' ]; then
+    #    curl -LO https://nightly.link/elihwyma/Pogo/workflows/build/root/Pogo.zip
+    #    mv Pogo.zip work/Pogo.zip
+    #    unzip work/Pogo.zip -d work/Pogo
+    #    unzip work/Pogo/Pogo.ipa -d work/Pogo/Pogo
+    #    mkdir -p work/Pogo/uwu/usr/local/bin/loader.app
+    #    cp -R work/Pogo/Pogo/Payload/Pogo.app/* work/Pogo/uwu/usr/local/bin/loader.app
 
-        "$oscheck"/hfsplus work/ramdisk.dmg rmall usr/local/bin/loader.app > /dev/null
-        "$oscheck"/hfsplus work/ramdisk.dmg addall work/Pogo/uwu > /dev/null
-        "$oscheck"/hfsplus work/ramdisk.dmg mv /usr/local/bin/loader.app/Pogo /usr/local/bin/loader.app/Tips > /dev/null
-    fi
+    #    "$oscheck"/hfsplus work/ramdisk.dmg rmall usr/local/bin/loader.app > /dev/null
+    #    "$oscheck"/hfsplus work/ramdisk.dmg addall work/Pogo/uwu > /dev/null
+    #    "$oscheck"/hfsplus work/ramdisk.dmg mv /usr/local/bin/loader.app/Pogo /usr/local/bin/loader.app/Tips > /dev/null
+    #fi
 fi
 python3 -m pyimg4 im4p create -i work/ramdisk.dmg -o work/ramdisk.im4p -f rdsk
 python3 -m pyimg4 img4 create -p work/ramdisk.im4p -m work/IM4M -o sshramdisk/ramdisk.img4
