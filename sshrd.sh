@@ -165,7 +165,9 @@ cd ..
 "$oscheck"/img4 -i work/"$(awk "/""${replace}""/{x=1}x&&/kernelcache.release/{print;exit}" work/BuildManifest.plist | grep '<string>' |cut -d\> -f2 |cut -d\< -f1)" -o work/kcache.raw
 "$oscheck"/Kernel64Patcher work/kcache.raw work/kcache.patched -a
 # "$oscheck"/kerneldiff work/kcache.raw work/kcache.patched work/kc.bpatch
-"$oscheck"/img4 -i work/kcache.patched -o sshramdisk/kernelcache.img4 -M work/IM4M -T rkrn `if [ "$oscheck" = 'Linux' ]; then echo "-J"; fi`
+python3 -m pyimg4 im4p create -i work/kcache.patched -o work/kcache.im4p -f rkrn --lzss
+"$oscheck"/img4 -i work/kcache.im4p -o sshramdisk/kernelcache.img4 -M work/IM4M `if [ "$oscheck" = 'Linux' ]; then echo "-J"; fi`
+#"$oscheck"/img4 -i work/kcache.patched -o sshramdisk/kernelcache.img4 -M work/IM4M -T rkrn `if [ "$oscheck" = 'Linux' ]; then echo "-J"; fi`
 "$oscheck"/img4 -i work/"$(awk "/""${replace}""/{x=1}x&&/DeviceTree[.]/{print;exit}" work/BuildManifest.plist | grep '<string>' |cut -d\> -f2 |cut -d\< -f1 | sed 's/Firmware[/]all_flash[/]//')" -o sshramdisk/devicetree.img4 -M work/IM4M -T rdtr
 
 if [ "$oscheck" = 'Darwin' ]; then
