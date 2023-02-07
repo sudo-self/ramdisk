@@ -121,7 +121,7 @@ else
         device_os=iOS
     fi
 
-    buildid=$(curl -sL https://api.appledb.dev/main.json | jq -r '.ios[] | select(.version == "'$1'") | select(.osStr == "'$device_os'").devices["'$deviceid'"].ipsw')
+    buildid=$(curl -sL https://api.appledb.dev/main.json | "$dir"/jq -r '.ios[] | select(.version == "'$1'") | select(.osStr == "'$device_os'").devices["'$deviceid'"].ipsw')
 fi
 
 "$oscheck"/gaster pwn
