@@ -32,7 +32,6 @@ Create and boot a SSH ramdisk on checkm8 devices
 6. Finally, to mount the filesystems, run `mount_filesystems`  
     - /var is mounted to /mnt2 in the ssh session.
     - /private/preboot is mounted to /mnt6.
-7. Have fun!
 
 # Other commands
 
@@ -40,6 +39,6 @@ Create and boot a SSH ramdisk on checkm8 devices
 - Dump onboard blobs: `./sshrd.sh dump-blobs`
 - Delete old SSH ramdisk: `./sshrd.sh clean`
 
-# Other Stuff
+![ssh](https://user-images.githubusercontent.com/119916323/230703244-d8c04517-9de9-408d-8c8d-3571932ea1ab.jpg)![IMG_1082](https://user-images.githubusercontent.com/119916323/230703275-bdaf060f-1f3d-44a2-98cd-aa6a5f7d4e5d.jpg)
 
-- [Reddit Post](https://www.reddit.com/r/jailbreak/comments/wgiye1/free_release_ssh_ramdisk_creator_for_iphones_ipad/)
+
