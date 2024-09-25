@@ -10,11 +10,12 @@
 </p>
 
 <p align="center">
-Create and boot a SSH ramdisk on checkm8 devices
+Create and boot a SSH ramdisk on checkm8 devices.
 </p>
 
 ---
-
+## Warning
+This was used in palera1n.sh, this is no longer gonna be maintained.
 # Prerequsites
 
 1. A computer running macOS/linux
